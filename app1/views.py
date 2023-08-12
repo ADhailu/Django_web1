@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Home, Services, About
+from .models import Home, Services, About, Contact, ContactPage
 from django.contrib.auth.models import User, auth
 # Create your views here.
 def home(request):
@@ -37,4 +37,21 @@ def about(request):
     content = About.objects.all().first()
     return render (request,'about.html', {'content': content})
     print(content.aboutimage)
+
+def contact(request):
+
+    ContactInfo = ContactPage.objects.all().first()
+
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+
+        contact = Contact(name=name, email=email, subject=subject, message=message)
+        contact.save()
+
+    else:
+        pass
     
+    return render(request, 'contact.html', {'ContactInfo': ContactInfo})
